@@ -39,3 +39,267 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* MarkdownEditor 스타일 커스터마이징 */
+.markdown-editor {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.markdown-editor .cm-editor {
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Inconsolata, "Roboto Mono", monospace !important;
+}
+
+.markdown-editor .cm-content {
+  padding: 16px !important;
+}
+
+.markdown-editor .cm-focused {
+  outline: none !important;
+}
+
+/* 툴바 스타일 */
+.markdown-editor .toolbar {
+  border-bottom: 1px solid #e5e7eb !important;
+  background-color: #f9fafb !important;
+  padding: 8px 12px !important;
+}
+
+.markdown-editor .toolbar button {
+  color: #6b7280 !important;
+  border-radius: 6px !important;
+  margin: 0 2px !important;
+  background: none !important;
+  border: none !important;
+  padding: 4px 8px !important;
+}
+
+.markdown-editor .toolbar button:hover {
+  background-color: #e5e7eb !important;
+  color: #374151 !important;
+}
+
+/* 마크다운 프리뷰 스타일 */
+.wmde-markdown,
+.wmde-markdown-var {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: #374151 !important;
+}
+
+.wmde-markdown h1,
+.wmde-markdown h2,
+.wmde-markdown h3,
+.wmde-markdown h4,
+.wmde-markdown h5,
+.wmde-markdown h6 {
+  color: #1f2937 !important;
+  margin-top: 16px !important;
+  margin-bottom: 8px !important;
+  font-weight: 600 !important;
+}
+
+.wmde-markdown h1:first-child,
+.wmde-markdown h2:first-child,
+.wmde-markdown h3:first-child {
+  margin-top: 0 !important;
+}
+
+.wmde-markdown h1 {
+  font-size: 24px !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  padding-bottom: 8px !important;
+}
+
+.wmde-markdown h2 {
+  font-size: 20px !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  padding-bottom: 6px !important;
+}
+
+.wmde-markdown h3 {
+  font-size: 18px !important;
+}
+
+.wmde-markdown p {
+  margin-bottom: 8px !important;
+  margin-top: 0 !important;
+}
+
+.wmde-markdown p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.wmde-markdown code {
+  background-color: #f3f4f6 !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 13px !important;
+  color: #ef4444 !important;
+}
+
+.wmde-markdown pre {
+  background-color: #f8fafc !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  padding: 16px !important;
+  overflow-x: auto !important;
+  margin: 8px 0 !important;
+}
+
+.wmde-markdown pre code {
+  background-color: transparent !important;
+  color: #374151 !important;
+  padding: 0 !important;
+}
+
+.wmde-markdown blockquote {
+  border-left: 4px solid #3b82f6 !important;
+  padding-left: 16px !important;
+  margin: 8px 0 !important;
+  color: #6b7280 !important;
+  font-style: italic !important;
+}
+
+/* 번호 목록 및 일반 목록 스타일 개선 */
+.wmde-markdown ul,
+.wmde-markdown ol {
+  margin: 8px 0 !important;
+  padding-left: 24px !important;
+  list-style: initial !important;
+}
+
+.wmde-markdown ol {
+  list-style-type: decimal !important;
+}
+
+.wmde-markdown ul {
+  list-style-type: disc !important;
+}
+
+.wmde-markdown li {
+  margin: 2px 0 !important;
+  display: list-item !important;
+  list-style: inherit !important;
+}
+
+.wmde-markdown li::marker {
+  color: #6b7280 !important;
+}
+
+.wmde-markdown table {
+  border-collapse: collapse !important;
+  margin: 8px 0 !important;
+  width: 100% !important;
+}
+
+.wmde-markdown th,
+.wmde-markdown td {
+  border: 1px solid #e5e7eb !important;
+  padding: 8px 12px !important;
+  text-align: left !important;
+}
+
+.wmde-markdown th {
+  background-color: #f9fafb !important;
+  font-weight: 600 !important;
+}
+
+.wmde-markdown hr {
+  border: none !important;
+  border-top: 1px solid #e5e7eb !important;
+  margin: 16px 0 !important;
+}
+
+.wmde-markdown a {
+  color: #3b82f6 !important;
+  text-decoration: underline !important;
+}
+
+.wmde-markdown a:hover {
+  color: #1d4ed8 !important;
+}
+
+/* 중첩 목록 지원 */
+.wmde-markdown ul ul,
+.wmde-markdown ol ol,
+.wmde-markdown ul ol,
+.wmde-markdown ol ul {
+  margin: 0 !important;
+}
+
+.wmde-markdown ul ul {
+  list-style-type: circle !important;
+}
+
+.wmde-markdown ul ul ul {
+  list-style-type: square !important;
+}
+
+/* 새로운 마크다운 에디터를 위한 추가 스타일 */
+.markdown-preview,
+.cm-markdown-preview,
+.react-markdown {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: #374151 !important;
+}
+
+.markdown-preview ol,
+.cm-markdown-preview ol,
+.react-markdown ol {
+  list-style-type: decimal !important;
+  margin: 8px 0 !important;
+  padding-left: 24px !important;
+}
+
+.markdown-preview ul,
+.cm-markdown-preview ul,
+.react-markdown ul {
+  list-style-type: disc !important;
+  margin: 8px 0 !important;
+  padding-left: 24px !important;
+}
+
+.markdown-preview li,
+.cm-markdown-preview li,
+.react-markdown li {
+  display: list-item !important;
+  margin: 2px 0 !important;
+  list-style: inherit !important;
+}
+
+.markdown-preview p,
+.cm-markdown-preview p,
+.react-markdown p {
+  margin: 8px 0 !important;
+}
+
+.markdown-preview h1,
+.markdown-preview h2,
+.markdown-preview h3,
+.cm-markdown-preview h1,
+.cm-markdown-preview h2,
+.cm-markdown-preview h3,
+.react-markdown h1,
+.react-markdown h2,
+.react-markdown h3 {
+  margin: 16px 0 8px 0 !important;
+  font-weight: 600 !important;
+}
+
+.markdown-preview h1:first-child,
+.markdown-preview h2:first-child,
+.markdown-preview h3:first-child,
+.cm-markdown-preview h1:first-child,
+.cm-markdown-preview h2:first-child,
+.cm-markdown-preview h3:first-child,
+.react-markdown h1:first-child,
+.react-markdown h2:first-child,
+.react-markdown h3:first-child {
+  margin-top: 0 !important;
+}

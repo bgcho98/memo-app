@@ -1,14 +1,22 @@
 'use client'
 
 import { Memo, MEMO_CATEGORIES } from '@/types/memo'
+import dynamic from 'next/dynamic'
+
+// MarkdownEditor.Markdown만 동적으로 import
+const MarkdownPreview = dynamic(
+  () => import('@uiw/react-markdown-editor').then(mod => ({ default: mod.default.Markdown })),
+  { ssr: false }
+)
 
 interface MemoItemProps {
   memo: Memo
+  onView: () => void
   onEdit: (memo: Memo) => void
   onDelete: (id: string) => void
 }
 
-export default function MemoItem({ memo, onEdit, onDelete }: MemoItemProps) {
+export default function MemoItem({ memo, onView, onEdit, onDelete }: MemoItemProps) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleDateString('ko-KR', {
@@ -22,41 +30,59 @@ export default function MemoItem({ memo, onEdit, onDelete }: MemoItemProps) {
 
   const getCategoryColor = (category: string) => {
     const colors = {
-      personal: 'bg-blue-100 text-blue-800',
-      work: 'bg-green-100 text-green-800',
-      study: 'bg-purple-100 text-purple-800',
-      idea: 'bg-yellow-100 text-yellow-800',
-      other: 'bg-gray-100 text-gray-800',
+      personal: 'bg-blue-50 text-blue-700 border-blue-200',
+      work: 'bg-green-50 text-green-700 border-green-200',
+      study: 'bg-purple-50 text-purple-700 border-purple-200',
+      idea: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+      other: 'bg-gray-50 text-gray-700 border-gray-200',
     }
     return colors[category as keyof typeof colors] || colors.other
   }
+  
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onEdit(memo);
+  }
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (window.confirm('정말로 이 메모를 삭제하시겠습니까?')) {
+      onDelete(memo.id)
+    }
+  }
 
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-200">
+    <div 
+      className="bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-xl hover:scale-[1.02] hover:border-blue-300 transition-all duration-300 cursor-pointer group"
+      onClick={onView}
+    >
       {/* 헤더 */}
       <div className="flex justify-between items-start mb-3">
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+          <h3 className="text-lg font-semibold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-700 transition-colors">
             {memo.title}
           </h3>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <span
-              className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(memo.category)}`}
+              className={`px-3 py-1 rounded-full text-xs font-medium border ${getCategoryColor(memo.category)}`}
             >
               {MEMO_CATEGORIES[memo.category as keyof typeof MEMO_CATEGORIES] ||
                 memo.category}
             </span>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-gray-500 flex items-center gap-1">
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
               {formatDate(memo.updatedAt)}
             </span>
           </div>
         </div>
 
         {/* 액션 버튼 */}
-        <div className="flex gap-2 ml-4">
+        <div className="flex gap-1 ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <button
-            onClick={() => onEdit(memo)}
-            className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            onClick={handleEditClick}
+            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-200 hover:scale-110"
             title="편집"
           >
             <svg
@@ -74,12 +100,8 @@ export default function MemoItem({ memo, onEdit, onDelete }: MemoItemProps) {
             </svg>
           </button>
           <button
-            onClick={() => {
-              if (window.confirm('정말로 이 메모를 삭제하시겠습니까?')) {
-                onDelete(memo.id)
-              }
-            }}
-            className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            onClick={handleDeleteClick}
+            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all duration-200 hover:scale-110"
             title="삭제"
           >
             <svg
@@ -100,23 +122,36 @@ export default function MemoItem({ memo, onEdit, onDelete }: MemoItemProps) {
       </div>
 
       {/* 내용 */}
-      <div className="mb-4">
-        <p className="text-gray-700 text-sm leading-relaxed line-clamp-3">
-          {memo.content}
-        </p>
+      <div className="mb-5">
+        <div className="text-gray-600 text-sm leading-relaxed line-clamp-3 group-hover:text-gray-700 transition-colors prose prose-sm prose-gray max-w-none [&>*]:!my-0 [&>*]:!mb-1">
+          <MarkdownPreview 
+            source={memo.content.length > 100 ? memo.content.substring(0, 100) + '...' : memo.content}
+            style={{ 
+              color: 'inherit',
+              fontSize: 'inherit',
+              fontFamily: 'inherit',
+              lineHeight: 'inherit'
+            }}
+          />
+        </div>
       </div>
 
       {/* 태그 */}
       {memo.tags.length > 0 && (
         <div className="flex gap-2 flex-wrap">
-          {memo.tags.map((tag, index) => (
+          {memo.tags.slice(0, 3).map((tag, index) => (
             <span
               key={index}
-              className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-md"
+              className="px-2 py-1 bg-gradient-to-r from-gray-50 to-gray-100 text-gray-600 text-xs rounded-full border border-gray-200 hover:border-blue-300 transition-colors"
             >
               #{tag}
             </span>
           ))}
+          {memo.tags.length > 3 && (
+            <span className="px-2 py-1 bg-gray-50 text-gray-500 text-xs rounded-full border border-gray-200">
+              +{memo.tags.length - 3}
+            </span>
+          )}
         </div>
       )}
     </div>
