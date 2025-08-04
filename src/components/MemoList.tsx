@@ -10,6 +10,7 @@ interface MemoListProps {
   selectedCategory: string
   onSearchChange: (query: string) => void
   onCategoryChange: (category: string) => void
+  onViewMemo: (memo: Memo) => void
   onEditMemo: (memo: Memo) => void
   onDeleteMemo: (id: string) => void
   stats: {
@@ -26,6 +27,7 @@ export default function MemoList({
   selectedCategory,
   onSearchChange,
   onCategoryChange,
+  onViewMemo,
   onEditMemo,
   onDeleteMemo,
   stats,
@@ -151,6 +153,7 @@ export default function MemoList({
             <MemoItem
               key={memo.id}
               memo={memo}
+              onView={() => onViewMemo(memo)}
               onEdit={onEditMemo}
               onDelete={onDeleteMemo}
             />

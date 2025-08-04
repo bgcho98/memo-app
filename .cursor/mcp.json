@@ -5,10 +5,10 @@
       "args": [
         "-y",
         "@supabase/mcp-server-supabase@0.4.5",
-        "--project-ref=<project-ref>"
+        "--project-ref=https://cyfosrufawcujzrhcgjn.supabase.co"
       ],
       "env": {
-        "SUPABASE_ACCESS_TOKEN": "<personal-access-token>"
+        "SUPABASE_ACCESS_TOKEN": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5Zm9zcnVmYXdjdWp6cmhjZ2puIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQyNjY3NjcsImV4cCI6MjA2OTg0Mjc2N30.XLApgzb_24yZrhhjSN6lxzbVuhvmOMAn23eOyViaTlk"
       }
     },
     "playwright-mcp": {
@@ -16,8 +16,7 @@
       "args": ["@playwright/mcp@0.0.32"]
     },
     "context7": {
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "url": "https://mcp.context7.com/mcp"
     }
   }
 }

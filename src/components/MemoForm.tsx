@@ -1,12 +1,21 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import {
   Memo,
   MemoFormData,
   MEMO_CATEGORIES,
   DEFAULT_CATEGORIES,
 } from '@/types/memo'
+import '@uiw/react-markdown-editor/markdown-editor.css'
+import '@uiw/react-markdown-preview/markdown.css'
+
+// MarkdownEditor를 동적으로 import (SSR 방지)
+const MarkdownEditor = dynamic(
+  () => import('@uiw/react-markdown-editor').then((mod) => mod.default),
+  { ssr: false }
+)
 
 interface MemoFormProps {
   isOpen: boolean
@@ -88,7 +97,7 @@ export default function MemoForm({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           {/* 헤더 */}
           <div className="flex justify-between items-center mb-6">
@@ -170,26 +179,24 @@ export default function MemoForm({
 
             {/* 내용 */}
             <div>
-              <label
-                htmlFor="content"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                내용 *
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                내용 * (마크다운 지원)
               </label>
-              <textarea
-                id="content"
-                value={formData.content}
-                onChange={e =>
-                  setFormData(prev => ({
-                    ...prev,
-                    content: e.target.value,
-                  }))
-                }
-                className="placeholder-gray-400 text-gray-400 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
-                placeholder="메모 내용을 입력하세요"
-                rows={8}
-                required
-              />
+              <div className="border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-colors">
+                <MarkdownEditor
+                  value={formData.content}
+                  onChange={(value) =>
+                    setFormData(prev => ({
+                      ...prev,
+                      content: value || '',
+                    }))
+                  }
+                  height="300px"
+                />
+              </div>
+              {!formData.content.trim() && (
+                <p className="text-sm text-red-500 mt-1">내용을 입력해주세요.</p>
+              )}
             </div>
 
             {/* 태그 */}

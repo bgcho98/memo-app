@@ -5,6 +5,7 @@ import { useMemos } from '@/hooks/useMemos'
 import { Memo, MemoFormData } from '@/types/memo'
 import MemoList from '@/components/MemoList'
 import MemoForm from '@/components/MemoForm'
+import MemoViewer from '@/components/MemoViewer'
 
 export default function Home() {
   const {
@@ -22,6 +23,7 @@ export default function Home() {
 
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingMemo, setEditingMemo] = useState<Memo | null>(null)
+  const [selectedMemo, setSelectedMemo] = useState<Memo | null>(null)
 
   const handleCreateMemo = (formData: MemoFormData) => {
     createMemo(formData)
@@ -32,6 +34,7 @@ export default function Home() {
     if (editingMemo) {
       updateMemo(editingMemo.id, formData)
       setEditingMemo(null)
+      setIsFormOpen(false)
     }
   }
 
@@ -43,6 +46,24 @@ export default function Home() {
   const handleCloseForm = () => {
     setIsFormOpen(false)
     setEditingMemo(null)
+  }
+
+  const handleViewMemo = (memo: Memo) => {
+    setSelectedMemo(memo)
+  }
+
+  const handleCloseViewer = () => {
+    setSelectedMemo(null)
+  }
+
+  const handleEditFromViewer = (memo: Memo) => {
+    handleCloseViewer();
+    handleEditMemo(memo);
+  }
+
+  const handleDeleteFromViewer = (id: string) => {
+    deleteMemo(id);
+    handleCloseViewer();
   }
 
   return (
@@ -91,6 +112,7 @@ export default function Home() {
           selectedCategory={selectedCategory}
           onSearchChange={searchMemos}
           onCategoryChange={filterByCategory}
+          onViewMemo={handleViewMemo}
           onEditMemo={handleEditMemo}
           onDeleteMemo={deleteMemo}
           stats={stats}
@@ -104,6 +126,16 @@ export default function Home() {
         onSubmit={editingMemo ? handleUpdateMemo : handleCreateMemo}
         editingMemo={editingMemo}
       />
+
+      {/* 메모 뷰어 모달 */}
+      {selectedMemo && (
+        <MemoViewer
+          memo={selectedMemo}
+          onClose={handleCloseViewer}
+          onEdit={handleEditFromViewer}
+          onDelete={handleDeleteFromViewer}
+        />
+      )}
     </div>
   )
 }
